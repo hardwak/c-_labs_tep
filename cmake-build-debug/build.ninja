@@ -49,11 +49,11 @@ cmake_ninja_workdir = C$:/Study/Programming/C++/tepLaby/cmake-build-debug/
 
 build cmake_object_order_depends_target_tepLaby: phony || CMakeFiles/tepLaby.dir
 
-build CMakeFiles/tepLaby.dir/main.cpp.obj: CXX_COMPILER__tepLaby_unscanned_Debug C$:/Study/Programming/C++/tepLaby/main.cpp || cmake_object_order_depends_target_tepLaby
-  DEP_FILE = CMakeFiles\tepLaby.dir\main.cpp.obj.d
+build CMakeFiles/tepLaby.dir/memoryAllocation/main.cpp.obj: CXX_COMPILER__tepLaby_unscanned_Debug C$:/Study/Programming/C++/tepLaby/memoryAllocation/main.cpp || cmake_object_order_depends_target_tepLaby
+  DEP_FILE = CMakeFiles\tepLaby.dir\memoryAllocation\main.cpp.obj.d
   FLAGS = -g -fdiagnostics-color=always
   OBJECT_DIR = CMakeFiles\tepLaby.dir
-  OBJECT_FILE_DIR = CMakeFiles\tepLaby.dir
+  OBJECT_FILE_DIR = CMakeFiles\tepLaby.dir\memoryAllocation
 
 
 # =============================================================================
@@ -63,7 +63,7 @@ build CMakeFiles/tepLaby.dir/main.cpp.obj: CXX_COMPILER__tepLaby_unscanned_Debug
 #############################################
 # Link the executable tepLaby.exe
 
-build tepLaby.exe: CXX_EXECUTABLE_LINKER__tepLaby_Debug CMakeFiles/tepLaby.dir/main.cpp.obj
+build tepLaby.exe: CXX_EXECUTABLE_LINKER__tepLaby_Debug CMakeFiles/tepLaby.dir/memoryAllocation/main.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\tepLaby.dir

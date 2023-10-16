@@ -6,7 +6,10 @@ using namespace std;
 int main() {
     v_alloc_table_fill_34(5);
     int **piTable;
-    b_alloc_table_2_dim(&piTable, 5, 3);
+    int sizeX = 5, sizeY = 3;
+
+    b_alloc_table_2_dim(&piTable, sizeX, sizeY);
+    b_dealloc_table_2_dim(&piTable, sizeX, sizeY);
 
 }
 
@@ -55,5 +58,3 @@ bool b_dealloc_table_2_dim(int ***piTable, int iSizeX, int iSizeY){
 
     return true;
 }
-
-

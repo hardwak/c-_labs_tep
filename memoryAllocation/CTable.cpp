@@ -31,7 +31,12 @@ public:
     CTable(CTable &pcOther){
         s_name = pcOther.s_name + "_copy";
         tableLen = pcOther.tableLen;
-        piTable = pcOther.piTable;
+        piTable = new int [tableLen];
+
+        for (int i = 0; i < tableLen; ++i) {
+            piTable[i] = pcOther.piTable[i];
+        }
+
         cout << "kopiuj: '<" << s_name << ">'" << endl;
     }
 
@@ -79,6 +84,15 @@ int main(){
 
     pc_new_tab = c_tab.pcClone();
 
+    cout << "--------------------------" << endl;
+    cout << "first Tab" << endl;
+
+    v_mod_tab(pc_new_tab, 5);
+    printTAB(pc_new_tab->getTab(), 5);
+
+    cout << "second Tab" << endl;
+    v_mod_tab_noP(c_tab, 5);
+    printTAB(c_tab.getTab(), 5);
 
 
 }
@@ -97,9 +111,17 @@ void fillTabWithNum(int *piTab, int size, int num){
 }
 
 void v_mod_tab(CTable *pcTab, int iNewSize){
+    if (iNewSize < 1)
+        return;
 
+//    pcTab->bSetNewSize(iNewSize);
+    pcTab->getTab()[0] = 0;
 }
 
-void v_mod_tab(CTable cTab, int iNewSize){
+void v_mod_tab_noP(CTable cTab, int iNewSize){
+    if (iNewSize < 1)
+        return;
 
+//    cTab.bSetNewSize(iNewSize);
+    cTab.getTab()[0] = 0;
 }

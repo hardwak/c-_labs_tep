@@ -6,6 +6,7 @@
 #define TEPLABY_CTABLE_H
 
 class CTable;
+void cTableTest();
 void v_mod_tab(CTable *pcTab, int iNewSize);
 void v_mod_tab_noP(CTable cTab, int iNewSize);
 void printTAB(int *piTab, int size);

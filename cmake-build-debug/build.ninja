@@ -49,6 +49,18 @@ cmake_ninja_workdir = C$:/Study/Programming/C++/tepLaby/cmake-build-debug/
 
 build cmake_object_order_depends_target_tepLaby: phony || CMakeFiles/tepLaby.dir
 
+build CMakeFiles/tepLaby.dir/memoryAllocation/main.cpp.obj: CXX_COMPILER__tepLaby_unscanned_Debug C$:/Study/Programming/C++/tepLaby/memoryAllocation/main.cpp || cmake_object_order_depends_target_tepLaby
+  DEP_FILE = CMakeFiles\tepLaby.dir\memoryAllocation\main.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\tepLaby.dir
+  OBJECT_FILE_DIR = CMakeFiles\tepLaby.dir\memoryAllocation
+
+build CMakeFiles/tepLaby.dir/memoryAllocation/modification.cpp.obj: CXX_COMPILER__tepLaby_unscanned_Debug C$:/Study/Programming/C++/tepLaby/memoryAllocation/modification.cpp || cmake_object_order_depends_target_tepLaby
+  DEP_FILE = CMakeFiles\tepLaby.dir\memoryAllocation\modification.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\tepLaby.dir
+  OBJECT_FILE_DIR = CMakeFiles\tepLaby.dir\memoryAllocation
+
 build CMakeFiles/tepLaby.dir/memoryAllocation/CTable.cpp.obj: CXX_COMPILER__tepLaby_unscanned_Debug C$:/Study/Programming/C++/tepLaby/memoryAllocation/CTable.cpp || cmake_object_order_depends_target_tepLaby
   DEP_FILE = CMakeFiles\tepLaby.dir\memoryAllocation\CTable.cpp.obj.d
   FLAGS = -g -fdiagnostics-color=always
@@ -63,7 +75,7 @@ build CMakeFiles/tepLaby.dir/memoryAllocation/CTable.cpp.obj: CXX_COMPILER__tepL
 #############################################
 # Link the executable tepLaby.exe
 
-build tepLaby.exe: CXX_EXECUTABLE_LINKER__tepLaby_Debug CMakeFiles/tepLaby.dir/memoryAllocation/CTable.cpp.obj
+build tepLaby.exe: CXX_EXECUTABLE_LINKER__tepLaby_Debug CMakeFiles/tepLaby.dir/memoryAllocation/main.cpp.obj CMakeFiles/tepLaby.dir/memoryAllocation/modification.cpp.obj CMakeFiles/tepLaby.dir/memoryAllocation/CTable.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\tepLaby.dir

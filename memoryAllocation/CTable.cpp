@@ -74,7 +74,7 @@ public:
     }
 };
 
-int main(){
+void cTableTest(){
 
     CTable c_tab = *new CTable();  //??? *
     CTable *pc_new_tab;

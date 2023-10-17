@@ -3,6 +3,10 @@ project(tepLaby)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(tepLaby
+add_executable(tepLaby memoryAllocation/main.cpp
+        memoryAllocation/main.h
+        memoryAllocation/modification.cpp
+        memoryAllocation/modification.h
         memoryAllocation/CTable.cpp
-        memoryAllocation/CTable.h)
+        memoryAllocation/CTable.h
+)

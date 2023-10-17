@@ -1,9 +1,13 @@
 #include <iostream>
 #include "main.h"
+#include "modification.h"
+#include "CTable.h"
 
 using namespace std;
 
 int main() {
+    cTableTest();
+    cout << "End of Ctable test" << endl;
     v_alloc_table_fill_34(5);
     int **piTable;
     int sizeX = 5, sizeY = 3;
@@ -11,6 +15,10 @@ int main() {
     b_alloc_table_2_dim(&piTable, sizeX, sizeY);
     b_dealloc_table_2_dim(&piTable, sizeX, sizeY);
 
+    int** testTab = allocateTable2DBlock(3, 5);
+    deallocateTable2DBlock(testTab);
+
+    cout << "end";
 }
 
 void v_alloc_table_fill_34(int iSize){

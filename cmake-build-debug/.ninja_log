@@ -1,17 +1,13 @@
 # ninja log v5
-2	411	7192620141017927	build.ninja	c2ad276e558e352f
+3	401	7201313044192149	build.ninja	c2ad276e558e352f
 2	404	7191788466919767	CMakeFiles/tepLaby.dir/main.cpp.obj	bf741288414c3832
-1004	1267	7192613425975478	tepLaby.exe	9c988bf878a0d21e
-36	329	7192604780778715	CMakeFiles/tepLaby.dir/memoryAllocation/modifiction.cpp.obj	688d5b855c37243
-3	442	7192552586313149	CMakeFiles/tepLaby.dir/memoryAllocation/CTable.cpp.obj	6b5eab5babf1fcde
-6	1119	7192612826615520	CMakeFiles/tepLaby.dir/memoryAllocation/main.cpp.obj	4c28c824037bbb77
-7	1003	7192613423378135	CMakeFiles/tepLaby.dir/memoryAllocation/modification.cpp.obj	a1717de48117a8cb
-3	401	7192620141017927	build.ninja	c2ad276e558e352f
-6	997	7192620152484974	CMakeFiles/tepLaby.dir/memoryAllocation/main.cpp.obj	4c28c824037bbb77
-30	1039	7192620152937427	CMakeFiles/tepLaby.dir/memoryAllocation/modification.cpp.obj	a1717de48117a8cb
-43	1054	7192620153082202	CMakeFiles/tepLaby.dir/memoryAllocation/CTable.cpp.obj	6b5eab5babf1fcde
-1055	1299	7192620155480728	tepLaby.exe	9a8fe4c7be2d2390
-6	1035	7192620398177817	CMakeFiles/tepLaby.dir/memoryAllocation/main.cpp.obj	4c28c824037bbb77
-1036	1282	7192620400634270	tepLaby.exe	9a8fe4c7be2d2390
-6	995	7192620656222629	CMakeFiles/tepLaby.dir/memoryAllocation/main.cpp.obj	4c28c824037bbb77
 996	1250	7192620658704619	tepLaby.exe	9a8fe4c7be2d2390
+6	995	7192620656222629	CMakeFiles/tepLaby.dir/memoryAllocation/main.cpp.obj	4c28c824037bbb77
+43	1054	7192620153082202	CMakeFiles/tepLaby.dir/memoryAllocation/CTable.cpp.obj	6b5eab5babf1fcde
+36	329	7192604780778715	CMakeFiles/tepLaby.dir/memoryAllocation/modifiction.cpp.obj	688d5b855c37243
+30	1039	7192620152937427	CMakeFiles/tepLaby.dir/memoryAllocation/modification.cpp.obj	a1717de48117a8cb
+2	290	7201313044192149	build.ninja	c2ad276e558e352f
+3	469	7201313049583362	CMakeFiles/tepLaby.dir/main.cpp.obj	bf741288414c3832
+19	511	7201313050003457	CMakeFiles/tepLaby.dir/memoryAllocation/CTable.cpp.obj	6b5eab5babf1fcde
+3	410	7201313228056620	CMakeFiles/tepLaby.dir/memoryAllocation/memoryAllocationTasks.cpp.obj	333f0e85e0989f25
+411	687	7201313230801830	tepLaby.exe	d2d98c9167833e9f

@@ -1,13 +1,14 @@
+//
+// Created by ymher on 27.10.2023.
+//
 #include <iostream>
-#include "main.h"
+#include "memoryAllocationTasks.h"
 #include "modification.h"
 #include "CTable.h"
 
-using namespace std;
-
-int main() {
+void ma_test(){
     cTableTest();
-    cout << "End of Ctable test" << endl;
+    std::cout << "End of Ctable test" << std::endl;
     v_alloc_table_fill_34(5);
     int **piTable;
     int sizeX = 5, sizeY = 3;
@@ -18,12 +19,12 @@ int main() {
     int** testTab = allocateTable2DBlock(3, 5);
     deallocateTable2DBlock(testTab);
 
-    cout << "end";
+    std::cout << "end";
 }
 
 void v_alloc_table_fill_34(int iSize){
     if (iSize < 1)
-        throw invalid_argument("Tab size should be greater than 0");
+        throw std::invalid_argument("Tab size should be greater than 0");
 
     int* tab;
     tab = new int[iSize];
@@ -32,8 +33,8 @@ void v_alloc_table_fill_34(int iSize){
 
 
     for (int i = 0; i < iSize; ++i)
-        cout << tab[i] << " ";
-    cout << endl;
+        std::cout << tab[i] << " ";
+    std::cout << std::endl;
 
     delete tab;
 }

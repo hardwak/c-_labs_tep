@@ -6,5 +6,6 @@
 #define TEPLABY_MAIN_H
 
 void memoryAllocationTasksTest();
+void operatorOverloadingTest();
 
 #endif //TEPLABY_MAIN_H

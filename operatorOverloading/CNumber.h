@@ -23,6 +23,8 @@ public:
 
     CNumber& operator=(const int iValue);
     CNumber& operator=(const CNumber &pcOther);
+    friend std::ostream& operator<<(std::ostream& os, const CNumber& obj);
+    std::string sToStr();
 
 };
 

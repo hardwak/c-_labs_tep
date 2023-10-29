@@ -73,6 +73,12 @@ build CMakeFiles/tepLaby.dir/memoryAllocation/memoryAllocationTasks.cpp.obj: CXX
   OBJECT_DIR = CMakeFiles\tepLaby.dir
   OBJECT_FILE_DIR = CMakeFiles\tepLaby.dir\memoryAllocation
 
+build CMakeFiles/tepLaby.dir/operatorOverloading/CNumber.cpp.obj: CXX_COMPILER__tepLaby_unscanned_Debug C$:/Study/Programming/C++/tepLaby/operatorOverloading/CNumber.cpp || cmake_object_order_depends_target_tepLaby
+  DEP_FILE = CMakeFiles\tepLaby.dir\operatorOverloading\CNumber.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always
+  OBJECT_DIR = CMakeFiles\tepLaby.dir
+  OBJECT_FILE_DIR = CMakeFiles\tepLaby.dir\operatorOverloading
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target tepLaby
@@ -81,7 +87,7 @@ build CMakeFiles/tepLaby.dir/memoryAllocation/memoryAllocationTasks.cpp.obj: CXX
 #############################################
 # Link the executable tepLaby.exe
 
-build tepLaby.exe: CXX_EXECUTABLE_LINKER__tepLaby_Debug CMakeFiles/tepLaby.dir/main.cpp.obj CMakeFiles/tepLaby.dir/memoryAllocation/modification.cpp.obj CMakeFiles/tepLaby.dir/memoryAllocation/CTable.cpp.obj CMakeFiles/tepLaby.dir/memoryAllocation/memoryAllocationTasks.cpp.obj
+build tepLaby.exe: CXX_EXECUTABLE_LINKER__tepLaby_Debug CMakeFiles/tepLaby.dir/main.cpp.obj CMakeFiles/tepLaby.dir/memoryAllocation/modification.cpp.obj CMakeFiles/tepLaby.dir/memoryAllocation/CTable.cpp.obj CMakeFiles/tepLaby.dir/memoryAllocation/memoryAllocationTasks.cpp.obj CMakeFiles/tepLaby.dir/operatorOverloading/CNumber.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\tepLaby.dir

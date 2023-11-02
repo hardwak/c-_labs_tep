@@ -26,7 +26,6 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const CNumber& obj);
     std::string sToStr();
     CNumber operator+(CNumber &other);
-
 };
 
 void oo_test();

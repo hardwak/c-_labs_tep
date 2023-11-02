@@ -83,6 +83,7 @@ CNumber CNumber::operator+(CNumber &other) {
         overTen = singleNum >= 10 ? 1 : 0;
     }
 
+
     if (overTen == 1) {
         int *newTab = new int[size + 1];
         newTab[0] = 1;

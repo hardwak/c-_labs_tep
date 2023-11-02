@@ -25,6 +25,7 @@ public:
     CNumber& operator=(const CNumber &pcOther);
     friend std::ostream& operator<<(std::ostream& os, const CNumber& obj);
     std::string sToStr();
+    CNumber operator+(CNumber &other);
 
 };
 

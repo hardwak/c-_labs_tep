@@ -6,10 +6,15 @@
 #define TEPLABY_CNUMBER_H
 
 
+#include <vector>
+
 class CNumber {
 private:
     int *tab;
     int size;
+    static void eraseZerosFromVectorBegin(std::vector<int> &vector);
+    static CNumber convertVectorToCNumber(std::vector<int> &vector);
+    static std::vector<int> convertCNumberToVector(CNumber *num);
 public:
     CNumber(){
         size = 10;
@@ -27,6 +32,7 @@ public:
     std::string sToStr();
     CNumber operator+(CNumber &other);
     CNumber operator-(CNumber &other);
+    CNumber operator*(CNumber &other);
 };
 
 void oo_test();

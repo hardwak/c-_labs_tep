@@ -6,19 +6,55 @@
 #include <vector>
 
 void oo_test() {
-    CNumber c_num_0, c_num_1;
-    c_num_0 = 234;
-    c_num_1 = 78;
+    CNumber c_num_0, c_num_1, c_num_2;
+    c_num_0 = 2147483647;
+    c_num_1 = 2147483647;
 
     std::cout << c_num_0.sToStr() << " " << c_num_1.sToStr() << std::endl;
 
-    std::cout << "Sum: " << c_num_1 + c_num_0 << std::endl;
+    c_num_2 = c_num_1 + c_num_0;
+
+    std::cout << "Sum: " << c_num_2 << std::endl;
 
     std::cout << "Diff: " << c_num_0 - c_num_1 << std::endl;
+
+    std::cout << "Mult: " << c_num_0 * c_num_1 << std::endl;
+
 
 //    c_num_0 = c_num_1;
 
     std::cout << c_num_0 << " " << c_num_1 << std::endl;
+}
+
+void CNumber::eraseZerosFromVectorBegin(std::vector<int> &vector){
+    while (vector.size() > 0 && vector.front() == 0) {
+        vector.erase(vector.begin());
+    }
+
+    if (vector.empty())
+        vector.push_back(0);
+}
+
+CNumber CNumber::convertVectorToCNumber(std::vector<int> &vector){
+    CNumber newNumber;
+    delete[] newNumber.tab;
+    newNumber.tab = new int[vector.size()];
+    newNumber.size = vector.size();
+
+    for (int i = 0; i < vector.size(); ++i) {
+        newNumber.tab[i] = vector.at(i);
+    }
+
+    return newNumber;
+}
+
+std::vector<int> CNumber::convertCNumberToVector(CNumber *num){
+    std::vector<int> v;
+    v.reserve(num->size);
+    for (int i = 0; i < num->size; ++i)
+        v.push_back(num->tab[i]);
+
+    return v;
 }
 
 CNumber &CNumber::operator=(const int iValue) {
@@ -104,13 +140,8 @@ CNumber CNumber::operator+(CNumber &other) {
 CNumber CNumber::operator-(CNumber &other) {
     std::vector<int> num1, num2, result;
 
-    num1.reserve(this->size);
-    for (int i = 0; i < this->size; ++i)
-        num1.push_back(this->tab[i]);
-
-    num2.reserve(other.size);
-    for (int i = 0; i < other.size; ++i)
-        num2.push_back(other.tab[i]);
+    num1 = convertCNumberToVector(this);
+    num2 = convertCNumberToVector(&other);
 
     int borrow = 0;
     for (int i = 0; i < std::max(num1.size(), num2.size()); ++i) {
@@ -118,7 +149,7 @@ CNumber CNumber::operator-(CNumber &other) {
         int singleNum2 = (i < num2.size()) ? num2.at(num2.size() - 1 - i) : 0;
 
         int diff = singleNum1 - singleNum2 - borrow;
-        if (diff < 0){
+        if (diff < 0) {
             diff += 10;
             borrow = 1;
         } else
@@ -127,23 +158,51 @@ CNumber CNumber::operator-(CNumber &other) {
         result.insert(result.begin(), diff);
     }
 
-    while (result.size() > 0 && result.front() == 0){
-        result.erase(result.begin());
+    eraseZerosFromVectorBegin(result);
+
+    return convertVectorToCNumber(result);
+}
+
+CNumber CNumber::operator*(CNumber &other) {
+    std::vector<int> num1, num2;
+
+    CNumber result;
+    result = 0;
+
+    num1 = convertCNumberToVector(this);
+    num2 = convertCNumberToVector(&other);
+
+    int borrow = 0;
+    for (int i = 0; i < num2.size(); ++i) {
+        std::vector<int> nextNum;
+        for (int j = 0; j < num1.size(); ++j) {
+            int singleNum = num2.at(num2.size() - 1 - i) * num1.at(num1.size() - 1 - j) + borrow;
+            borrow = singleNum / 10;
+            nextNum.insert(nextNum.begin(), singleNum % 10);
+            if (j == num1.size() - 1 && borrow > 0){
+                nextNum.insert(nextNum.begin(), singleNum / 10);
+            }
+        }
+        borrow = 0;
+
+        eraseZerosFromVectorBegin(nextNum);
+
+        CNumber newNumber;
+        delete[] newNumber.tab;
+        newNumber.tab = new int[nextNum.size() + i];
+        newNumber.size = nextNum.size() + i;
+
+        for (int j = 0; j < nextNum.size() + i; ++j) {
+            if (j < nextNum.size())
+                newNumber.tab[j] = nextNum.at(j);
+            else
+                newNumber.tab[j] = 0;
+        }
+
+        result = result + newNumber;
     }
 
-    if (result.empty())
-        result.push_back(0);
-
-    CNumber newNumber;
-    delete[] newNumber.tab;
-    newNumber.tab = new int[result.size()];
-    newNumber.size = result.size();
-
-    for (int i = 0; i < result.size(); ++i) {
-        newNumber.tab[i] = result.at(i);
-    }
-
-    return newNumber;
+    return result;
 }
 
 std::ostream &operator<<(std::ostream &os, const CNumber &obj) {

@@ -8,7 +8,7 @@
 void oo_test() {
     CNumber c_num_0, c_num_1, c_num_2;
     c_num_0 = 2147483647;
-    c_num_1 = 2147483647;
+    c_num_1 = 24512;
 
     std::cout << c_num_0.sToStr() << " " << c_num_1.sToStr() << std::endl;
 
@@ -20,13 +20,13 @@ void oo_test() {
 
     std::cout << "Mult: " << c_num_0 * c_num_1 << std::endl;
 
-
+    std::cout << "Division: " << c_num_0 / c_num_1 << std::endl;
 //    c_num_0 = c_num_1;
 
     std::cout << c_num_0 << " " << c_num_1 << std::endl;
 }
 
-void CNumber::eraseZerosFromVectorBegin(std::vector<int> &vector){
+void CNumber::eraseZerosFromVectorBegin(std::vector<int> &vector) {
     while (vector.size() > 0 && vector.front() == 0) {
         vector.erase(vector.begin());
     }
@@ -35,7 +35,7 @@ void CNumber::eraseZerosFromVectorBegin(std::vector<int> &vector){
         vector.push_back(0);
 }
 
-CNumber CNumber::convertVectorToCNumber(std::vector<int> &vector){
+CNumber CNumber::convertVectorToCNumber(std::vector<int> &vector) {
     CNumber newNumber;
     delete[] newNumber.tab;
     newNumber.tab = new int[vector.size()];
@@ -48,7 +48,7 @@ CNumber CNumber::convertVectorToCNumber(std::vector<int> &vector){
     return newNumber;
 }
 
-std::vector<int> CNumber::convertCNumberToVector(CNumber *num){
+std::vector<int> CNumber::convertCNumberToVector(CNumber *num) {
     std::vector<int> v;
     v.reserve(num->size);
     for (int i = 0; i < num->size; ++i)
@@ -179,7 +179,7 @@ CNumber CNumber::operator*(CNumber &other) {
             int singleNum = num2.at(num2.size() - 1 - i) * num1.at(num1.size() - 1 - j) + borrow;
             borrow = singleNum / 10;
             nextNum.insert(nextNum.begin(), singleNum % 10);
-            if (j == num1.size() - 1 && borrow > 0){
+            if (j == num1.size() - 1 && borrow > 0) {
                 nextNum.insert(nextNum.begin(), singleNum / 10);
             }
         }
@@ -205,6 +205,78 @@ CNumber CNumber::operator*(CNumber &other) {
     return result;
 }
 
+CNumber CNumber::operator/(CNumber &other) const {
+    CNumber copy, result, one;
+    copy = *this;
+    one = 1;
+    result = 0;
+
+    if (other == result)
+        throw std::invalid_argument("Division by zero not allowed");
+
+    while (copy > other || copy == other) {
+        copy = copy - other;
+        result = result + one;
+    }
+
+    return result;
+
+    /*std::vector<int> num1, result;
+
+    num1 = convertCNumberToVector(this);
+
+    int num2 = 0;
+    for (int i = 0; i < other.size; ++i) {
+        num2 += other.tab[other.size - 1 -i] * std::pow(10, i);
+    }
+
+    int borrow = 1;
+    while (num1.size() > 0){
+        int singleNum = 0;
+        for (int i = 0; i < borrow; ++i) {
+            singleNum += num1.at(borrow - 1 - i) * std::pow(10, i);
+        }
+        if (singleNum / num2 == 0){
+            borrow++;
+        }
+        else{
+            result.push_back(singleNum / num2);
+
+            int rest = singleNum % num2;
+            for (int i = 0; i < borrow; ++i) {
+                num1.erase(num1.begin());
+            }//first erase numbers, then push to begin rest
+
+            borrow = 1;
+        }
+    }*/
+}
+
+bool CNumber::operator>(CNumber &other) {
+    if (this->size == other.size) {
+        for (int i = 0; i < this->size; ++i) {
+            if (this->tab[i] > other.tab[i])
+                return true;
+            else if (this->tab[i] != other.tab[i])
+                return false;
+        }
+    } else
+        return this->size > other.size;
+    return false;
+}
+
+bool CNumber::operator==(CNumber &other) {
+    if (this->size != other.size)
+        return false;
+    else {
+        for (int i = 0; i < this->size; ++i) {
+            if (this->tab[i] != other.tab[i])
+                return false;
+        }
+    }
+    return true;
+}
+
 std::ostream &operator<<(std::ostream &os, const CNumber &obj) {
     std::string stringToReturn;
     for (int i = 0; i < obj.size; ++i) {
@@ -221,4 +293,28 @@ std::string CNumber::sToStr() {
         stringToReturn += std::to_string(tab[i]);
     }
     return stringToReturn;
+}
+
+CNumber CNumber::operator+(int value) {
+    CNumber num;
+    num = value;
+    return *this + num;
+}
+
+CNumber CNumber::operator-(int value) {
+    CNumber num;
+    num = value;
+    return *this - num;
+}
+
+CNumber CNumber::operator*(int value) {
+    CNumber num;
+    num = value;
+    return *this * num;
+}
+
+CNumber CNumber::operator/(int value) const {
+    CNumber num;
+    num = value;
+    return *this / num;
 }

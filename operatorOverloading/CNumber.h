@@ -31,8 +31,15 @@ public:
     friend std::ostream& operator<<(std::ostream& os, const CNumber& obj);
     std::string sToStr();
     CNumber operator+(CNumber &other);
+    CNumber operator+(int value);
     CNumber operator-(CNumber &other);
+    CNumber operator-(int value);
     CNumber operator*(CNumber &other);
+    CNumber operator*(int value);
+    CNumber operator/(CNumber &other) const;
+    CNumber operator/(int value) const;
+    bool operator>(CNumber &other);
+    bool operator==(CNumber &other);
 };
 
 void oo_test();

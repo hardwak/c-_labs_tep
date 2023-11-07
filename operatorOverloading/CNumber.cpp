@@ -7,10 +7,13 @@
 
 void oo_test() {
     CNumber c_num_0, c_num_1, c_num_2;
-    c_num_0 = 2147483647;
-    c_num_1 = 24512;
+    c_num_0 = -321;
+    c_num_1 = 134;
 
     std::cout << c_num_0.sToStr() << " " << c_num_1.sToStr() << std::endl;
+
+    bool b = c_num_0 > c_num_1;
+    std::cout << b << std::endl;
 
     c_num_2 = c_num_1 + c_num_0;
 
@@ -21,7 +24,6 @@ void oo_test() {
     std::cout << "Mult: " << c_num_0 * c_num_1 << std::endl;
 
     std::cout << "Division: " << c_num_0 / c_num_1 << std::endl;
-//    c_num_0 = c_num_1;
 
     std::cout << c_num_0 << " " << c_num_1 << std::endl;
 }
@@ -57,11 +59,78 @@ std::vector<int> CNumber::convertCNumberToVector(CNumber *num) {
     return v;
 }
 
+CNumber CNumber::add(CNumber &other) {
+
+    std::vector<int> num1, num2, result;
+
+    num1 = convertCNumberToVector(this);
+    num2 = convertCNumberToVector(&other);
+
+    int borrow = 0;
+    for (int i = 0; i < std::max(num1.size(), num2.size()); ++i) {
+        int singleNum1 = (i < num1.size()) ? num1.at(num1.size() - 1 - i) : 0;
+        int singleNum2 = (i < num2.size()) ? num2.at(num2.size() - 1 - i) : 0;
+
+        int sum = singleNum1 + singleNum2 + borrow;
+        result.insert(result.begin(), sum % 10);
+        borrow = sum / 10;
+    }
+
+    if (borrow > 0) {
+        result.insert(result.begin(), borrow);
+    }
+
+    eraseZerosFromVectorBegin(result);
+
+    return convertVectorToCNumber(result);
+}
+
+CNumber CNumber::subtract(CNumber &other) {
+    std::vector<int> num1, num2, result;
+    bool negative = false;
+
+    if (other > *this){
+        num2 = convertCNumberToVector(this);
+        num1 = convertCNumberToVector(&other);
+        negative = true;
+    } else {
+        num1 = convertCNumberToVector(this);
+        num2 = convertCNumberToVector(&other);
+    }
+
+    int borrow = 0;
+    for (int i = 0; i < std::max(num1.size(), num2.size()); ++i) {
+        int singleNum1 = (i < num1.size()) ? num1.at(num1.size() - 1 - i) : 0;
+        int singleNum2 = (i < num2.size()) ? num2.at(num2.size() - 1 - i) : 0;
+
+        int diff = singleNum1 - singleNum2 - borrow;
+        if (diff < 0) {
+            diff += 10;
+            borrow = 1;
+        } else
+            borrow = 0;
+
+        result.insert(result.begin(), diff);
+    }
+
+    eraseZerosFromVectorBegin(result);
+
+    CNumber newNumber = convertVectorToCNumber(result);
+    newNumber.isNegative = negative;
+
+    return newNumber;
+}
+
 CNumber &CNumber::operator=(const int iValue) {
     if (tab)
         delete[]tab;
 
     std::string number = std::to_string(iValue);
+
+    if (number[0] == '-') {
+        this->isNegative = true;
+        number.erase(number.begin());
+    }
 
     tab = new int[number.size()];
     //why static cast
@@ -87,6 +156,7 @@ CNumber &CNumber::operator=(const CNumber &pcOther) {
         delete[] tab;
     }
 
+    this->isNegative = pcOther.isNegative;
     this->size = pcOther.size;
 
     tab = new int[size];
@@ -98,69 +168,34 @@ CNumber &CNumber::operator=(const CNumber &pcOther) {
 }
 
 CNumber CNumber::operator+(CNumber &other) {
-    CNumber *bigger = this;
-    CNumber *smaller = &other;
-    if (this->size < other.size) {
-        bigger = &other;
-        smaller = this;
-    }
-
-    CNumber newNumber;
-    delete[] newNumber.tab;
-    newNumber.tab = new int[bigger->size];
-    newNumber.size = bigger->size;
-
-    int singleNum;
-    int borrow = 0;
-    for (int i = 0; i < bigger->size; ++i) {
-        singleNum = bigger->tab[bigger->size - 1 - i] + borrow;
-        if (smaller->size - 1 - i >= 0)
-            singleNum += smaller->tab[smaller->size - 1 - i];
-
-        newNumber.tab[newNumber.size - 1 - i] = singleNum % 10;
-
-        borrow = singleNum >= 10 ? 1 : 0;
-    }
-
-    if (borrow == 1) {
-        int *newTab = new int[size + 1];
-        newTab[0] = 1;
-        for (int i = 1; i < size + 1; ++i) {
-            newTab[i] = newNumber.tab[i - 1];
-        }
-        delete[] newNumber.tab;
-
-        newNumber.tab = newTab;
-        newNumber.size++;
-    }
-
-    return newNumber;
+//    if (this->isNegative && other.isNegative) { // -x + (-y)
+//        CNumber newNumber = this->add(other);
+//        newNumber.isNegative = true;
+//        return newNumber;
+//    } else if (this->isNegative) { // -x + y
+//        return other.subtract(*this);
+//    } else if (other.isNegative) { // x + (-y)
+//        return this->subtract(other);
+//    } else { // x + y
+//        return this->add(other);
+//    }
+    return this->add(other);
 }
 
 CNumber CNumber::operator-(CNumber &other) {
-    std::vector<int> num1, num2, result;
-
-    num1 = convertCNumberToVector(this);
-    num2 = convertCNumberToVector(&other);
-
-    int borrow = 0;
-    for (int i = 0; i < std::max(num1.size(), num2.size()); ++i) {
-        int singleNum1 = (i < num1.size()) ? num1.at(num1.size() - 1 - i) : 0;
-        int singleNum2 = (i < num2.size()) ? num2.at(num2.size() - 1 - i) : 0;
-
-        int diff = singleNum1 - singleNum2 - borrow;
-        if (diff < 0) {
-            diff += 10;
-            borrow = 1;
-        } else
-            borrow = 0;
-
-        result.insert(result.begin(), diff);
-    }
-
-    eraseZerosFromVectorBegin(result);
-
-    return convertVectorToCNumber(result);
+//    if (this->isNegative && other.isNegative) { // -x - (-y)
+//        return other.subtract(*this);
+//    } else if (this->isNegative) {// -x - y
+//        CNumber num;
+//        num = this->add(other);
+//        num.isNegative = !num.isNegative;
+//        return num;
+//    } else if (other.isNegative) { // x - (-y)
+//        return this->add(other);
+//    } else { // x - y
+//        return this->subtract(other);
+//    }
+    return this->subtract(other);
 }
 
 CNumber CNumber::operator*(CNumber &other) {
@@ -202,21 +237,27 @@ CNumber CNumber::operator*(CNumber &other) {
         result = result + newNumber;
     }
 
+    if ((this->isNegative && !other.isNegative) || (!this->isNegative && other.isNegative))
+        result.isNegative = true;
     return result;
 }
 
 CNumber CNumber::operator/(CNumber &other) const {
-    CNumber copy, result, one;
+    CNumber copy, other_copy, result;
     copy = *this;
-    one = 1;
+    other_copy = other;
     result = 0;
+    if ((this->isNegative && !other.isNegative) || (!this->isNegative && other.isNegative))
+        result.isNegative = true;
+    copy.isNegative = false;
+    other_copy.isNegative = false;
 
     if (other == result)
         throw std::invalid_argument("Division by zero not allowed");
 
-    while (copy > other || copy == other) {
-        copy = copy - other;
-        result = result + one;
+    while (copy > other_copy || copy == other_copy) {
+        copy = copy - other_copy;
+        result = result + 1;
     }
 
     return result;
@@ -252,21 +293,27 @@ CNumber CNumber::operator/(CNumber &other) const {
     }*/
 }
 
-bool CNumber::operator>(CNumber &other) {
+bool CNumber::operator>(CNumber &other) const{
+    if (this->isNegative && !other.isNegative)
+        return false;
+    if (!this->isNegative && other.isNegative)
+        return true;
+
+
     if (this->size == other.size) {
         for (int i = 0; i < this->size; ++i) {
             if (this->tab[i] > other.tab[i])
-                return true;
+                return !(this->isNegative && other.isNegative);
             else if (this->tab[i] != other.tab[i])
-                return false;
+                return this->isNegative && other.isNegative;
         }
     } else
-        return this->size > other.size;
-    return false;
+        return (this->size > other.size) == !(this->isNegative && other.isNegative);
+    return this->isNegative && other.isNegative;
 }
 
 bool CNumber::operator==(CNumber &other) {
-    if (this->size != other.size)
+    if (this->size != other.size || this->isNegative != other.isNegative)
         return false;
     else {
         for (int i = 0; i < this->size; ++i) {
@@ -279,9 +326,10 @@ bool CNumber::operator==(CNumber &other) {
 
 std::ostream &operator<<(std::ostream &os, const CNumber &obj) {
     std::string stringToReturn;
+    if (obj.isNegative && obj.tab[0] != 0)
+        stringToReturn +="-";
     for (int i = 0; i < obj.size; ++i) {
         stringToReturn += std::to_string(obj.tab[i]);
-
     }
     os << stringToReturn;
     return os;
@@ -289,6 +337,8 @@ std::ostream &operator<<(std::ostream &os, const CNumber &obj) {
 
 std::string CNumber::sToStr() {
     std::string stringToReturn;
+    if (isNegative && tab[0] != 0)
+        stringToReturn +="-";
     for (int i = 0; i < size; ++i) {
         stringToReturn += std::to_string(tab[i]);
     }

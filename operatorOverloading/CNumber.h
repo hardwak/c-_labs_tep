@@ -13,9 +13,11 @@ private:
     bool isNegative;
     int *tab;
     int size;
+
     static void eraseZerosFromVectorBegin(std::vector<int> &vector);
     static CNumber convertVectorToCNumber(std::vector<int> &vector);
     static std::vector<int> convertCNumberToVector(CNumber *num);
+
     CNumber add(CNumber &other);
     CNumber subtract(CNumber &other);
 public:
@@ -44,6 +46,9 @@ public:
     CNumber operator/(int value) const;
     bool operator>(CNumber &other) const;
     bool operator==(CNumber &other);
+    CNumber& operator<=(CNumber &other);
+    friend int& operator<=(int &i, CNumber &number);
+    CNumber& operator<=(int i);
 };
 
 void oo_test();

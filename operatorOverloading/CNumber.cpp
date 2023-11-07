@@ -4,11 +4,12 @@
 #include <iostream>
 #include "CNumber.h"
 #include <vector>
+#include <cmath>
 
 void oo_test() {
     CNumber c_num_0, c_num_1, c_num_2;
-    c_num_0 = -321;
-    c_num_1 = 134;
+    c_num_0 = 321;
+    c_num_1 = 1343;
 
     std::cout << c_num_0.sToStr() << " " << c_num_1.sToStr() << std::endl;
 
@@ -26,6 +27,20 @@ void oo_test() {
     std::cout << "Division: " << c_num_0 / c_num_1 << std::endl;
 
     std::cout << c_num_0 << " " << c_num_1 << std::endl;
+
+    std::cout << "-----------------------------------------" << std::endl;
+    int i = 0;
+    std::cout << c_num_2 << std::endl;
+    c_num_2 <= c_num_0;
+    std::cout << c_num_2 << std::endl;
+    i <= c_num_2 <= c_num_0;
+    std::cout << i << std::endl;
+
+    CNumber n, m;
+    n = 1324;
+    m <= i <= n;
+    std::cout << m << std::endl;
+
 }
 
 void CNumber::eraseZerosFromVectorBegin(std::vector<int> &vector) {
@@ -123,7 +138,7 @@ CNumber CNumber::subtract(CNumber &other) {
 
 CNumber &CNumber::operator=(const int iValue) {
     if (tab)
-        delete[]tab;
+        delete[] tab;
 
     std::string number = std::to_string(iValue);
 
@@ -367,4 +382,22 @@ CNumber CNumber::operator/(int value) const {
     CNumber num;
     num = value;
     return *this / num;
+}
+
+CNumber &CNumber::operator<=(CNumber &other) {
+    *this = other;
+    return *this;
+}
+
+int& operator<=(int &i, CNumber &number){
+    i = 0;
+    for (int j = 0; j < number.size; ++j) {
+        i += number.tab[number.size - 1 - j] * std::pow(10,j);
+    }
+    return i;
+}
+
+CNumber &CNumber::operator<=(int i){
+    *this = i;
+    return *this;
 }

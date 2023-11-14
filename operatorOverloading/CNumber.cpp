@@ -8,8 +8,8 @@
 
 void oo_test() {
     CNumber c_num_0, c_num_1, c_num_2;
-    c_num_0 = 321;
-    c_num_1 = 1343;
+    c_num_0 = -321;
+    c_num_1 = -1343;
 
     std::cout << c_num_0.sToStr() << " " << c_num_1.sToStr() << std::endl;
 
@@ -160,8 +160,6 @@ CNumber &CNumber::operator=(const int iValue) {
 }
 
 CNumber &CNumber::operator=(const CNumber &pcOther) {
-//    tab = pcOther.tab;
-//    size = pcOther.size;
 
     if (&pcOther == this) {
         return *this;
@@ -183,34 +181,44 @@ CNumber &CNumber::operator=(const CNumber &pcOther) {
 }
 
 CNumber CNumber::operator+(CNumber &other) {
-//    if (this->isNegative && other.isNegative) { // -x + (-y)
-//        CNumber newNumber = this->add(other);
-//        newNumber.isNegative = true;
-//        return newNumber;
-//    } else if (this->isNegative) { // -x + y
-//        return other.subtract(*this);
-//    } else if (other.isNegative) { // x + (-y)
-//        return this->subtract(other);
-//    } else { // x + y
-//        return this->add(other);
-//    }
-    return this->add(other);
+    CNumber result;
+
+    if (this->isNegative && other.isNegative) { // -x + (-y) = -(x + y)
+        result = this->add(other);
+        result.isNegative = true;
+        return result;
+    } else if (this->isNegative) { // -x + y = y - x
+        this->isNegative = false;
+        result = other.subtract(*this);
+        this->isNegative = true;
+        return result;
+    } else if (other.isNegative) { // x + (-y) = x - y
+        other.isNegative = false;
+        result = this->subtract(other);
+        other.isNegative = true;
+        return result;
+    } else { // x + y
+        return this->add(other);
+    }
 }
 
 CNumber CNumber::operator-(CNumber &other) {
-//    if (this->isNegative && other.isNegative) { // -x - (-y)
-//        return other.subtract(*this);
-//    } else if (this->isNegative) {// -x - y
-//        CNumber num;
-//        num = this->add(other);
-//        num.isNegative = !num.isNegative;
-//        return num;
-//    } else if (other.isNegative) { // x - (-y)
-//        return this->add(other);
-//    } else { // x - y
-//        return this->subtract(other);
-//    }
-    return this->subtract(other);
+    CNumber result;
+
+    if (this->isNegative && other.isNegative) { // -x - (-y) = y - x
+        this->isNegative = other.isNegative = false;
+        result = other.subtract(*this);
+        this->isNegative = other.isNegative = true;
+        return result;
+    } else if (this->isNegative) {// -x - y = -(x + y)
+        result = this->add(other);
+        result.isNegative = !result.isNegative;
+        return result;
+    } else if (other.isNegative) { // x - (-y) = x + y
+        return this->add(other);
+    } else { // x - y
+        return this->subtract(other);
+    }
 }
 
 CNumber CNumber::operator*(CNumber &other) {
@@ -276,36 +284,6 @@ CNumber CNumber::operator/(CNumber &other) const {
     }
 
     return result;
-
-    /*std::vector<int> num1, result;
-
-    num1 = convertCNumberToVector(this);
-
-    int num2 = 0;
-    for (int i = 0; i < other.size; ++i) {
-        num2 += other.tab[other.size - 1 -i] * std::pow(10, i);
-    }
-
-    int borrow = 1;
-    while (num1.size() > 0){
-        int singleNum = 0;
-        for (int i = 0; i < borrow; ++i) {
-            singleNum += num1.at(borrow - 1 - i) * std::pow(10, i);
-        }
-        if (singleNum / num2 == 0){
-            borrow++;
-        }
-        else{
-            result.push_back(singleNum / num2);
-
-            int rest = singleNum % num2;
-            for (int i = 0; i < borrow; ++i) {
-                num1.erase(num1.begin());
-            }//first erase numbers, then push to begin rest
-
-            borrow = 1;
-        }
-    }*/
 }
 
 bool CNumber::operator>(CNumber &other) const{

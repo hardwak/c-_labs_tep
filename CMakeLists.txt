@@ -13,4 +13,6 @@ add_executable(tepLaby main.cpp
         memoryAllocation/memoryAllocationTasks.h
         operatorOverloading/CNumber.cpp
         operatorOverloading/CNumber.h
+        mathTree/MathTree.cpp
+        mathTree/MathTree.h
 )

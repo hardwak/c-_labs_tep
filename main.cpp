@@ -2,11 +2,12 @@
 #include "main.h"
 #include "memoryAllocation/memoryAllocationTasks.h"
 #include "operatorOverloading/CNumber.h"
+#include "mathTree/MathTree.h"
 
 using namespace std;
 
 int main() {
-    operatorOverloadingTest();
+    mt_test();
 }
 
 void memoryAllocationTasksTest(){

@@ -43,7 +43,7 @@ public:
 
     void printVars();
     float compile(Node* root, std::vector<float> *values);
-    void join();
+    void join(std::string formula);
     void clear();
     void print(Node* root);
     void create(std::string formula);

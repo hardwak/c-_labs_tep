@@ -5,6 +5,7 @@
 
 #include <cmath>
 #include <sstream>
+#include <utility>
 
 void mt_test(){
     MathTree tree;
@@ -17,6 +18,7 @@ void mt_test(){
     std::cout << "\n";
     tree.printVars();
     std::cout << "\n";
+    tree.join("+ 5 1");
     tree.clear();
     tree.create("3 - 3 5.5");
 
@@ -28,7 +30,7 @@ void MathTree::printVars() {
         return;
     }
 
-    if (vars.size() == 0){
+    if (vars.empty()){
         std::cout << "Tree dont have variables.\n";
         return;
     }
@@ -52,8 +54,14 @@ float MathTree::compile(Node* root, std::vector<float> *values) {
                 return compile(root->nodes.at(0), values) + compile(root->nodes.at(1), values);
             case MINUS:
                 return compile(root->nodes.at(0), values) - compile(root->nodes.at(1), values);
-            case DIV:
-                return compile(root->nodes.at(0), values) / compile(root->nodes.at(1), values);
+            case DIV: {
+                float num = compile(root->nodes.at(1), values);
+                if (num == 0){
+                    std::cout << "Division by 0 is not allowed!\n";
+                    num = 1;
+                }
+                return compile(root->nodes.at(0), values) / num;
+            }
             case MULT:
                 return compile(root->nodes.at(0), values) * compile(root->nodes.at(1), values);
             case SIN:
@@ -73,12 +81,30 @@ float MathTree::compile(Node* root, std::vector<float> *values) {
     return 0;
 }
 
-void MathTree::join() {
-    std::cout << "Current tree: ";
+void MathTree::join(std::string formula) {
+    if (vars.empty()){
+        std::cout << "Impossible to join another tree (no available variables)\n";
+        return;
+    }
+
+    printVars();
+    std::cout << "Choose one of the variables to replace (1-" << vars.size() << ")\n";
+
+    int option;
+    std::cin >> option;
+
+    if (option > vars.size() || option < 1) {
+        std::cout << "Incorrect number\n";
+        return;
+    }
+
+    std::vector<std::string> elements = splitString(std::move(formula));
+    delete vars.at(option - 1);
+    *vars.at(option - 1) = *createHelper(&elements);
+
+    std::cout << "New tree: ";
     print(root);
-    std::cout << "\n";
-
-
+    std::cout << std::endl;
 }
 
 void MathTree::print(Node* root) {
@@ -126,7 +152,7 @@ void MathTree::create(std::string formula) {
         return;
     }
 
-    std::vector<std::string> elements = splitString(formula);
+    std::vector<std::string> elements = splitString(std::move(formula));
 
     root = createHelper(&elements);
 

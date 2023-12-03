@@ -6,7 +6,6 @@
 #define TEPLABY_MATHTREE_H
 
 #include <iostream>
-#include <set>
 #include <vector>
 
 class MathTree{
@@ -37,25 +36,28 @@ private:
             }
         }
     };
-
-    std::set<Node*> vars;
+public:
+    Node* root = nullptr;
+    std::vector<Node*> vars;
 
 
     void printVars();
-    float compile();
+    float compile(Node* root, std::vector<float> *values);
     void join();
-
+    void clear();
+    void print(Node* root);
     void create(std::string formula);
+    bool empty();
 
     std::vector<std::string> splitString(std::string formula);
     Node* createHelper(std::vector<std::string> *elements);
     bool isStringANumber(std::string string);
-public:
-    void enterFormula(std::string formula);
+    Node* findNodeInVectorByName(std::vector<Node *> *vector, std::string string);
+
+
     void menu();
-    void print(Node* root);
-    Node* root = nullptr;
-    void clear();
+
+
 };
 
 void mt_test();

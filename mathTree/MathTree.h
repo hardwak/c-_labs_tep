@@ -37,23 +37,25 @@ private:
             }
         }
     };
-    Node* root;
+
     std::set<Node*> vars;
 
-    void enterFormula(std::string formula);
+
     void printVars();
     float compile();
     void join();
-    void printTree(Node* root);
 
-    bool isFormulaCorrect(std::string formula);
-    void createTree(std::string formula);
-    void clearTree();
+    void create(std::string formula);
+
     std::vector<std::string> splitString(std::string formula);
     Node* createHelper(std::vector<std::string> *elements);
     bool isStringANumber(std::string string);
 public:
+    void enterFormula(std::string formula);
     void menu();
+    void print(Node* root);
+    Node* root = nullptr;
+    void clear();
 };
 
 void mt_test();

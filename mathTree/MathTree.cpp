@@ -87,7 +87,7 @@ void MathTree::join(std::string formula) {
 
     std::vector<std::string> elements = splitString(std::move(formula));
     if (elements.empty()){
-        std::cout << "Incorrect number\n";
+        std::cout << "Formula wasn't provided\n";
         return;
     }
 
@@ -146,6 +146,10 @@ void MathTree::create(std::string formula) {
     }
 
     std::vector<std::string> elements = splitString(std::move(formula));
+    if (elements.empty()){
+        std::cout << "Formula wasn't provided\n";
+        return;
+    }
 
     root = createHelper(&elements);
 

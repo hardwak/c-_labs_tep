@@ -7,30 +7,18 @@
 #include <sstream>
 #include <utility>
 
-void mt_test(){
+void mt_test() {
     MathTree tree;
-    tree.create("+ * 5 cos x * + a b 8");
-    std::vector<float> values;
-    values.push_back(1);
-    values.push_back(2.2);
-    values.push_back(3.4);
-    std::cout << tree.compile(tree.root, &values) << "\n";
-    std::cout << "\n";
-    tree.printVars();
-    std::cout << "\n";
-    tree.join("+ 5 1");
-    tree.clear();
-    tree.create("3 - 3 5.5");
-
+    tree.menu();
 }
 
 void MathTree::printVars() {
-    if (empty()){
+    if (empty()) {
         std::cout << "Tree is empty.\n";
         return;
     }
 
-    if (vars.empty()){
+    if (vars.empty()) {
         std::cout << "Tree dont have variables.\n";
         return;
     }
@@ -42,13 +30,13 @@ void MathTree::printVars() {
     std::cout << std::endl;
 }
 
-float MathTree::compile(Node* root, std::vector<float> *values) {
-    if (empty()){
+float MathTree::compile(Node *root, std::vector<float> *values) {
+    if (empty()) {
         std::cout << "Tree is empty.\n";
         return 0;
     }
 
-    if (root->op != NIL){
+    if (root->op != NIL) {
         switch (root->op) {
             case PLUS:
                 return compile(root->nodes.at(0), values) + compile(root->nodes.at(1), values);
@@ -56,7 +44,7 @@ float MathTree::compile(Node* root, std::vector<float> *values) {
                 return compile(root->nodes.at(0), values) - compile(root->nodes.at(1), values);
             case DIV: {
                 float num = compile(root->nodes.at(1), values);
-                if (num == 0){
+                if (num == 0) {
                     std::cout << "Division by 0 is not allowed!\n";
                     num = 1;
                 }
@@ -71,23 +59,22 @@ float MathTree::compile(Node* root, std::vector<float> *values) {
             case NIL:
                 break;
         }
-    } else if (root->variable){
+    } else if (root->variable) {
         float currVal = values->front();
         values->erase(values->begin());
         return currVal;
-    } else{
+    } else {
         return root->value;
     }
     return 0;
 }
 
 void MathTree::join(std::string formula) {
-    if (vars.empty()){
-        std::cout << "Impossible to join another tree (no available variables)\n";
-        return;
-    }
-
     printVars();
+
+    if (empty() || vars.empty())
+        return;
+
     std::cout << "Choose one of the variables to replace (1-" << vars.size() << ")\n";
 
     int option;
@@ -99,21 +86,27 @@ void MathTree::join(std::string formula) {
     }
 
     std::vector<std::string> elements = splitString(std::move(formula));
+    if (elements.empty()){
+        std::cout << "Incorrect number\n";
+        return;
+    }
+
     delete vars.at(option - 1);
     *vars.at(option - 1) = *createHelper(&elements);
+    vars.erase(vars.begin() + option - 1);
 
     std::cout << "New tree: ";
     print(root);
     std::cout << std::endl;
 }
 
-void MathTree::print(Node* root) {
-    if (empty()){
+void MathTree::print(Node *root) {
+    if (empty()) {
         std::cout << "Tree is empty.\n";
         return;
     }
 
-    if (root->op != NIL){
+    if (root->op != NIL) {
         switch (root->op) {
             case PLUS:
                 std::cout << "+ ";
@@ -136,9 +129,9 @@ void MathTree::print(Node* root) {
             case NIL:
                 break;
         }
-    } else if (root->variable){
+    } else if (root->variable) {
         std::cout << root->name << " ";
-    } else{
+    } else {
         std::cout << root->value << " ";
     }
     for (int i = 0; i < root->nodes.size(); ++i) {
@@ -147,7 +140,7 @@ void MathTree::print(Node* root) {
 }
 
 void MathTree::create(std::string formula) {
-    if (!empty()){
+    if (!empty()) {
         std::cout << "Delete current tree before creating new.\n";
         return;
     }
@@ -160,9 +153,9 @@ void MathTree::create(std::string formula) {
     print(root);
     std::cout << std::endl;
 
-    if (!elements.empty()){
+    if (!elements.empty()) {
         std::cout << "Warning! Redundant elements was skipped: ";
-        for (const auto & element : elements) {
+        for (const auto &element: elements) {
             std::cout << element << " ";
         }
         std::cout << std::endl;
@@ -173,7 +166,7 @@ MathTree::Node *MathTree::createHelper(std::vector<std::string> *elements) {
     std::string current = elements->front();
     elements->erase(elements->begin());
     Node *node;
-    if (current == "+" || current == "-" || current == "*" || current == "/" || current == "sin" || current == "cos"){
+    if (current == "+" || current == "-" || current == "*" || current == "/" || current == "sin" || current == "cos") {
         if (current == "+") node = new Node(Operations(PLUS));
         if (current == "-") node = new Node(Operations(MINUS));
         if (current == "*") node = new Node(Operations(MULT));
@@ -181,21 +174,21 @@ MathTree::Node *MathTree::createHelper(std::vector<std::string> *elements) {
         if (current == "sin") node = new Node(Operations(SIN));
         if (current == "cos") node = new Node(Operations(COS));
 
-        if (elements->empty()){
+        if (elements->empty()) {
             elements->emplace_back("1");
             std::cout << "Missing variable replaced with 1\n";
         }
         node->nodes.push_back(createHelper(elements));
 
         if (current == "+" || current == "-" || current == "*" || current == "/") {
-            if (elements->empty()){
+            if (elements->empty()) {
                 elements->emplace_back("1");
                 std::cout << "Missing variable replaced with 1\n";
             }
             node->nodes.push_back(createHelper(elements));
         }
 
-    } else if (isStringANumber(current)){
+    } else if (isStringANumber(current)) {
         node = new Node(std::stof(current));
     } else {
         node = findNodeInVectorByName(&vars, current);
@@ -207,7 +200,7 @@ MathTree::Node *MathTree::createHelper(std::vector<std::string> *elements) {
     return node;
 }
 
-MathTree::Node* MathTree::findNodeInVectorByName(std::vector<Node *> *vector, std::string string) {
+MathTree::Node *MathTree::findNodeInVectorByName(std::vector<Node *> *vector, std::string string) {
     for (int i = 0; i < vector->size(); ++i) {
         if (vector->at(i)->name == string)
             return vector->at(i);
@@ -224,18 +217,64 @@ bool MathTree::isStringANumber(std::string string) {
 }
 
 void MathTree::menu() {
-    std::cout << "Choose option: \n"
-                 "1. Create tree;\n";
+    bool exit = false;
+
+    while (!exit) {
+        std::string str;
+        std::getline(std::cin, str);
+        std::string command = str.substr(0, str.find(' '));
+        if (command == "enter") {
+            create(str.substr(5));
+        } else if (command == "vars") {
+            printVars();
+        } else if (command == "print") {
+            print(root);
+            std::cout << std::endl;
+        } else if (command == "comp") {
+            std::vector<std::string> elements = splitString(str.substr(4));
+            std::vector<float> values;
+
+            int errors = 0;
+            if (elements.size() < vars.size())
+                errors++;
+            else {
+                for (int i = 0; i < elements.size(); ++i) {
+                    if (!isStringANumber(elements.at(i))) {
+                        errors++;
+                    } else {
+                        values.push_back(std::stof(elements.at(i)));
+                    }
+                }
+            }
+
+            if (errors != 0){
+                std::cout << "Provided incorrect numbers\n";
+            } else{
+                std::cout << "Result: " << compile(root, &values) << std::endl;
+            }
+        } else if (command == "join") {
+            join(str.substr(4));
+        } else if (command == "clear") {
+            clear();
+        } else if (command == "exit") {
+            exit = true;
+            delete root;
+            std::cout << "Stopping program...\n";
+        } else if (command == "help"){
+            std::cout << "Commands: \nenter <formula> \nvars \nprint \ncomp <var0> <var1> ... <varN> \njoin <formula> \nclear \nexit\n";
+        }
+    }
 }
 
 void MathTree::clear() {
-    if (empty()){
+    if (empty()) {
         std::cout << "Tree is empty.\n";
         return;
     }
 
     delete root;
     root = nullptr;
+    std::cout << "Tree cleared.\n";
 }
 
 std::vector<std::string> MathTree::splitString(std::string formula) {

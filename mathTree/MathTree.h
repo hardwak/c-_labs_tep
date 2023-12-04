@@ -36,10 +36,8 @@ private:
             }
         }
     };
-public:
     Node* root = nullptr;
     std::vector<Node*> vars;
-
 
     void printVars();
     float compile(Node* root, std::vector<float> *values);
@@ -54,7 +52,7 @@ public:
     bool isStringANumber(std::string string);
     Node* findNodeInVectorByName(std::vector<Node *> *vector, std::string string);
 
-
+public:
     void menu();
 
 

@@ -39,23 +39,23 @@ float MathTree::compile(Node *root, std::vector<float> *values) {
     if (root->op != NIL) {
         switch (root->op) {
             case PLUS:
-                return compile(root->nodes.at(0), values) + compile(root->nodes.at(1), values);
+                return compile(root->left, values) + compile(root->right, values);
             case MINUS:
-                return compile(root->nodes.at(0), values) - compile(root->nodes.at(1), values);
+                return compile(root->left, values) - compile(root->right, values);
             case DIV: {
-                float num = compile(root->nodes.at(1), values);
+                float num = compile(root->right, values);
                 if (num == 0) {
                     std::cout << "Division by 0 is not allowed!\n";
                     num = 1;
                 }
-                return compile(root->nodes.at(0), values) / num;
+                return compile(root->left, values) / num;
             }
             case MULT:
-                return compile(root->nodes.at(0), values) * compile(root->nodes.at(1), values);
+                return compile(root->left, values) * compile(root->right, values);
             case SIN:
-                return std::sin(compile(root->nodes.at(0), values));
+                return std::sin(compile(root->left, values));
             case COS:
-                return std::cos(compile(root->nodes.at(0), values));
+                return std::cos(compile(root->left, values));
             case NIL:
                 break;
         }
@@ -134,9 +134,10 @@ void MathTree::print(Node *root) {
     } else {
         std::cout << root->value << " ";
     }
-    for (int i = 0; i < root->nodes.size(); ++i) {
-        print(root->nodes.at(i));
-    }
+    if (root->left != nullptr)
+        print(root->left);
+    if (root->right != nullptr)
+        print(root->right);
 }
 
 void MathTree::create(std::string formula) {
@@ -182,14 +183,14 @@ MathTree::Node *MathTree::createHelper(std::vector<std::string> *elements) {
             elements->emplace_back("1");
             std::cout << "Missing variable replaced with 1\n";
         }
-        node->nodes.push_back(createHelper(elements));
+        node->left = createHelper(elements);
 
         if (current == "+" || current == "-" || current == "*" || current == "/") {
             if (elements->empty()) {
                 elements->emplace_back("1");
                 std::cout << "Missing variable replaced with 1\n";
             }
-            node->nodes.push_back(createHelper(elements));
+            node->right = createHelper(elements);
         }
 
     } else if (isStringANumber(current)) {

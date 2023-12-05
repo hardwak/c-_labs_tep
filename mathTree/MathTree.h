@@ -13,7 +13,8 @@ private:
     enum Operations{PLUS, MINUS, DIV, MULT, SIN, COS, NIL};
     class Node{
     public:
-        std::vector<Node*> nodes;
+        Node* left = nullptr;
+        Node* right = nullptr;
         float value = 0;
         std::string name;
         bool variable = false;
@@ -29,11 +30,8 @@ private:
             this->op = op;
         }
         ~Node(){
-            while (!nodes.empty()){
-                Node* current = nodes.front();
-                nodes.erase(nodes.begin());
-                delete current;
-            }
+            delete left;
+            delete right;
         }
     };
     Node* root = nullptr;

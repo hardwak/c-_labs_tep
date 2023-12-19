@@ -14,7 +14,7 @@ void oo_test() {
     std::cout << c_num_0.sToStr() << " " << c_num_1.sToStr() << std::endl;
 
     bool b = c_num_0 > c_num_1;
-    std::cout << b << std::endl;
+    std::cout << std::boolalpha << b << std::endl;
 
     c_num_2 = c_num_1 + c_num_0;
 

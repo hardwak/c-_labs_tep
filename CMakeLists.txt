@@ -17,4 +17,8 @@ add_executable(tepLaby main.cpp
         mathTree/MathTree.h
         Pointer/Pointer.cpp
         Pointer/Pointer.hpp
+        Pointer/MySmartPointer.cpp
+        Pointer/MySmartPointer.h
+        Pointer/CRefCounter.cpp
+        Pointer/CRefCounter.h
 )

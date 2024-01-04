@@ -48,6 +48,21 @@ private:
     Node *root = nullptr;
     std::vector<Node *> vars;
 
+    MathTree operator=(MathTree &&other) noexcept {
+        delete root;
+        vars.clear();
+
+        root = other.root;
+        vars = other.vars;
+    }
+
+    MathTree operator+(MathTree &other){
+        Node newRoot = new Node(PLUS);
+        newRoot.left = root;
+        newRoot.right = other.root;
+        root = newRoot;
+    }
+
     void printVars();
 
     T compile(Node *root, std::vector<T> *values);

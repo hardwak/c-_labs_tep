@@ -24,6 +24,15 @@ private:
         bool variable = false;
         Operations op = NIL;
 
+        Node() = default;
+
+        Node(const Node &other) : value(other.value), name(other.name), variable(other.variable), op(other.op) {
+            if (other.left)
+                left = new Node(*other.left);
+            if (other.right)
+                right = new Node(*other.right);
+        }
+
         explicit Node(T val) {
             value = val;
         }
@@ -48,34 +57,11 @@ private:
     Node *root = nullptr;
     std::vector<Node *> vars;
 
-    MathTree operator=(MathTree &&other) noexcept {
-        delete root;
-        vars.clear();
-
-        root = other.root;
-        vars = other.vars;
-    }
-
-    MathTree operator+(MathTree &other){
-        Node newRoot = new Node(PLUS);
-        newRoot.left = root;
-        newRoot.right = other.root;
-        root = newRoot;
-    }
-
-    void printVars();
-
     T compile(Node *root, std::vector<T> *values);
 
-    void join(std::string formula);
-
-    void clear();
-
-    void print(Node *root);
+    std::string getFormula(Node *root);
 
     void create(std::string formula);
-
-    bool empty();
 
     std::vector<std::string> splitString(std::string formula);
 
@@ -89,9 +75,65 @@ private:
 
     static std::string sGetKnownType();
 
+    Node *copyTree(const Node *root);
+
 public:
     void menu();
 
+    void printVars();
+
+    void clear();
+
+    bool empty();
+
+    void join(std::string formula);
+
+    void enter(std::string string);
+
+    void print();
+
+    void printResult();
+
+    MathTree() = default;
+
+    MathTree(const MathTree<T> &other) {
+        std::cout << "\nTREE COPY\n";
+
+        if (other.root)
+            root = copyTree(other.root);
+
+        for (int i = 0; i < other.vars.size(); ++i) {
+            vars.push_back(new Node(*other.vars.at(i)));
+        }
+    }
+
+    MathTree(MathTree<T> &&other) noexcept {
+        root = other.root;
+        vars = other.vars;
+        other.root = nullptr;
+    }
+
+    ~MathTree() {
+        delete root;
+        vars.clear();
+    }
+
+
+    MathTree &operator=(const MathTree<T> &other) noexcept;
+
+    MathTree &operator=(MathTree<T> &&other) noexcept;
+
+    MathTree operator+(const MathTree<T> &other);
+
+//    MathTree operator+(const MathTree<T> &other) &&{
+//        Node* newRoot = new Node(PLUS);
+//        newRoot->left = root;
+//        newRoot->right = copyTree(other.root);
+//        root = nullptr;
+//        MathTree<T> tree;
+//        tree.root = newRoot;
+//        return tree;
+//    }
 
 };
 

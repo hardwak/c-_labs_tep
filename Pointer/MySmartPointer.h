@@ -49,10 +49,10 @@ public:
 
         return *this;
     }
-private:
     CRefCounter *pc_counter;
+private:
     T *pc_pointer;
 };
-
+void smart_pointer_test();
 
 #endif //TEPLABY_MYSMARTPOINTER_H

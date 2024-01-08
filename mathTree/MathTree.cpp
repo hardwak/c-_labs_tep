@@ -8,8 +8,14 @@
 #include <utility>
 
 void mt_test() {
-    MathTree<std::string> tree;
-    tree.menu();
+    MathTree<int> tree;
+    MathTree<int> tree2;
+    tree.enter("* 7 8");
+    tree2.enter("+ + sin 3 4 8");
+    MathTree<int> tree3 = tree + tree2;
+    tree = tree3;
+    tree.printResult();
+
 }
 
 template<typename T>
@@ -30,6 +36,68 @@ std::string MathTree<float>::sGetKnownType() {
 template<>
 std::string MathTree<std::string>::sGetKnownType() {
     return "string";
+}
+
+template<typename T>
+typename MathTree<T>::Node *MathTree<T>::copyTree(const MathTree::Node *root) {
+    if (root == nullptr) return nullptr;
+
+    Node *newNode = new Node(*root);
+    newNode->left = copyTree(root->left);
+    newNode->right = copyTree(root->right);
+    return newNode;
+}
+
+template<typename T>
+MathTree<T> MathTree<T>::operator+(const MathTree<T> &other) {
+    Node *newRoot = new Node(PLUS);
+    newRoot->left = copyTree(root);
+    newRoot->right = copyTree(other.root);
+    MathTree<T> tree;
+    tree.root = newRoot;
+    return std::move(tree);
+}
+
+template<typename T>
+MathTree<T> &MathTree<T>::operator=(MathTree<T> &&other) noexcept {
+    if (this != &other) {
+        delete root;
+        vars.clear();
+
+        root = other.root;
+        vars = other.vars;
+
+        other.root = nullptr;
+//            other.vars.clear(); //czy usuwa node w samym vectorze?
+    }
+    return *this;
+}
+
+template<typename T>
+MathTree<T> &MathTree<T>::operator=(const MathTree<T> &other) noexcept {
+    if (this != &other) {
+        delete root;
+        vars.clear();
+        root = copyTree(other.root);
+        for (int i = 0; i < other.vars.size(); ++i) {
+            vars.push_back(new Node(*other.vars.at(i)));
+        }
+    }
+    return *this;
+}
+
+template<typename T>
+void MathTree<T>::printResult()  {
+    precompile("comp");
+}
+
+template<typename T>
+void MathTree<T>::print() {
+    std::cout << getFormula(root) + "\n";
+}
+template<typename T>
+void MathTree<T>::enter(std::string string) {
+    create(string);
 }
 
 template<>
@@ -231,50 +299,50 @@ void MathTree<T>::join(std::string formula) {
     *vars.at(option - 1) = *createHelper(&elements);
     vars.erase(vars.begin() + option - 1);
 
-    std::cout << "New tree: ";
-    print(root);
+    std::cout << "New tree: " + getFormula(root);
     std::cout << std::endl;
 }
 
 template<typename T>
-void MathTree<T>::print(Node *root) {
-    if (empty()) {
-        std::cout << "Tree is empty.\n";
-        return;
+std::string MathTree<T>::getFormula(Node *root) {
+    if (root == nullptr) {
+        return "";
     }
 
+    std::string formula;
     if (root->op != NIL) {
         switch (root->op) {
             case PLUS:
-                std::cout << "+ ";
+                formula+= "+ ";
                 break;
             case MINUS:
-                std::cout << "- ";
+                formula+= "- ";
                 break;
             case DIV:
-                std::cout << "/ ";
+                formula+= "/ ";
                 break;
             case MULT:
-                std::cout << "* ";
+                formula+= "* ";
                 break;
             case SIN:
-                std::cout << "sin ";
+                formula+= "sin ";
                 break;
             case COS:
-                std::cout << "cos ";
+                formula+= "cos ";
                 break;
             case NIL:
                 break;
         }
     } else if (root->variable) {
-        std::cout << root->name << " ";
+        formula+= root->name + " ";
     } else {
-        std::cout << root->value << " ";
+        formula+= std::to_string(root->value) + " ";
     }
     if (root->left != nullptr)
-        print(root->left);
+        formula+= getFormula(root->left);
     if (root->right != nullptr)
-        print(root->right);
+        formula+= getFormula(root->right);
+    return formula;
 }
 
 template<typename T>
@@ -293,7 +361,7 @@ void MathTree<T>::create(std::string formula) {
     root = createHelper(&elements);
 
     std::cout << "Created tree: ";
-    print(root);
+    std::cout << getFormula(root);
     std::cout << std::endl;
 
     if (!elements.empty()) {
@@ -500,9 +568,8 @@ void MathTree<T>::menu() {
             create(str.substr(5));
         } else if (command == "vars") {
             printVars();
-        } else if (command == "print") {
-            print(root);
-            std::cout << std::endl;
+        } else if (command == "getFormula") {
+            std::cout << getFormula(root) << std::endl;
         } else if (command == "comp") {
             precompile(str);
         } else if (command == "join") {
@@ -515,7 +582,7 @@ void MathTree<T>::menu() {
             std::cout << "Stopping program...\n";
         } else if (command == "help") {
             std::cout
-                    << "Commands: \nenter <formula> \nvars \nprint \ncomp <var0> <var1> ... <varN> \njoin <formula> \nclear \nexit\nhelp\n";
+                    << "Commands: \nenter <formula> \nvars \ngetFormula \ncomp <var0> <var1> ... <varN> \njoin <formula> \nclear \nexit\nhelp\n";
         }
     }
 }

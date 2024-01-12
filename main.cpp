@@ -4,12 +4,13 @@
 #include "operatorOverloading/CNumber.h"
 #include "mathTree/MathTree.h"
 #include "Pointer/Pointer.hpp"
-#include "Pointer/MySmartPointer.h"
+//#include "Pointer/MySmartPointer.h"
+#include "Pointer/MyArray.h"
 
 using namespace std;
 
 int main() {
-    mt_test();
+    myArrayTest();
 }
 
 void memoryAllocationTasksTest(){

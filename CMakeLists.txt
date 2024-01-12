@@ -21,4 +21,6 @@ add_executable(tepLaby main.cpp
         Pointer/MySmartPointer.h
         Pointer/CRefCounter.cpp
         Pointer/CRefCounter.h
+        Pointer/MyArray.cpp
+        Pointer/MyArray.h
 )

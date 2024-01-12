@@ -3,7 +3,7 @@
 //
 #include "CRefCounter.h"
 #ifndef TEPLABY_MYSMARTPOINTER_H
-#define TEPLABY_+-MYSMARTPOINTER_H
+#define TEPLABY_MYSMARTPOINTER_H
 
 template <typename T>
 class MySmartPointer{
@@ -23,6 +23,8 @@ public:
     MySmartPointer(MySmartPointer &&other){
         pc_counter = other.pc_counter;
         pc_pointer = other.pc_pointer;
+        other.pc_pointer = nullptr;
+        other.pc_counter = nullptr;
     }
     ~MySmartPointer()
     {

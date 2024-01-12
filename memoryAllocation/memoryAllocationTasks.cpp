@@ -24,7 +24,7 @@ void ma_test(){
 
 void v_alloc_table_fill_34(int iSize){
     if (iSize < 1)
-        throw std::invalid_argument("Tab size should be greater than 0");
+        throw std::invalid_argument("Tab tabSize should be greater than 0");
 
     int* tab;
     tab = new int[iSize];

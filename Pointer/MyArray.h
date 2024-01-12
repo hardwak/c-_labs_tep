@@ -14,7 +14,7 @@ public:
     MySmartPointer<T> ptr;
     int tabSize;
 
-    MyArray(int size): tabSize(size), ptr(new T[size]){}
+    explicit MyArray(int size): tabSize(size), ptr(new T[size]){}
 
     MyArray(const MyArray<T> &other): tabSize(other.tabSize){
         MySmartPointer<T> newPtr(new T[other.tabSize]);
@@ -29,9 +29,7 @@ public:
         other.tabSize = 0;
     }
 
-    ~MyArray(){
-//        delete[] *ptr;
-    }
+    ~MyArray()= default;
 
     int size(){
         return tabSize;
@@ -44,17 +42,17 @@ public:
             throw std::out_of_range("Index out of bound");
     }
 
-    MyArray& operator=(MyArray<T> &other) noexcept {
-        if (this != &other){
-            tabSize = other.tabSize;
-            MySmartPointer<T> newPtr(new T[other.tabSize]);
-            for (int i = 0; i < tabSize; ++i) {
-                newPtr.operator->()[i] = other.ptr.operator->()[i];
-            }
-            ptr = newPtr;
-        }
-        return *this;
-    }
+//    MyArray& operator=(MyArray<T> &other) noexcept {
+//        if (this != &other){
+//            tabSize = other.tabSize;
+//            MySmartPointer<T> newPtr(new T[other.tabSize]);
+//            for (int i = 0; i < tabSize; ++i) {
+//                newPtr.operator->()[i] = other.ptr.operator->()[i];
+//            }
+//            ptr = newPtr;
+//        }
+//        return *this;
+//    }
 //
 //    MyArray& operator=(MyArray<T> &&other) noexcept {
 //        if (this != &other){
